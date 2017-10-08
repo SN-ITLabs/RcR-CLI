@@ -27,7 +27,7 @@ SourceTagger.prototype = {
 	getTags: function(fileSysId, fileType) {
 		var latestVersion, currentVersion, diff, parentVersion, beforeDurationVersion;
 		var versionMap = [];
-		var prevDev = "", exists, equalArryIndx;
+		var prevDev = "", exists, equalArryIndx, insertArryIndx, replaceArryIndx;
 		var tags = {};
 		var alreadyReserved = [];
 		
@@ -39,25 +39,24 @@ SourceTagger.prototype = {
 		vGRBefore.orderByDesc('sys_created_on');
 		
 		vGRBefore.query();
-		
 		if(vGRBefore.next()){					
 			beforeDurationVersion = {'developer': vGRBefore.getValue("sys_created_by"), 
 									   'version': vGRBefore.getValue("sys_id"), 
 									   'payload': vGRBefore.getValue('payload')};
 		}
-		
+
 		var vGR = new GlideRecord('sys_update_version');
 		encodedQuery = "sys_created_on>=javascript:gs.daysAgoStart(" + this.duration + ")";
 		vGR.addEncodedQuery(encodedQuery);
 		vGR.addQuery('name',  fileType + '_' + fileSysId);
 		vGR.orderByDesc('sys_created_on');
 		vGR.query();
-		
+
 		while(vGR.next()){
 			versionMap.push({'developer': vGR.getValue("sys_created_by"), 'version': vGR.getValue("sys_id"), 'payload': vGR.getValue('payload')});  			
 		}
 
-		
+
 		for(var versionIndx in versionMap) {
 			if(!latestVersion) {
 				latestVersion = versionMap[versionIndx];
@@ -68,14 +67,14 @@ SourceTagger.prototype = {
 				if(!tags[parentVersion["developer"]]) {
 					tags[parentVersion["developer"]] = [];
 				}
-				for(var insertArryIndx in diff["insert"]) {
+				for(insertArryIndx in diff["insert"]) {
 					exists = this.arrayUtil.contains(alreadyReserved, diff["insert"][insertArryIndx]);
 					if(!exists) {
 						tags[parentVersion["developer"]].push(diff["insert"][insertArryIndx]);
 						alreadyReserved.push(diff["insert"][insertArryIndx]);
 					}
 				}
-				for(var replaceArryIndx in diff["replace"]) {
+				for(replaceArryIndx in diff["replace"]) {
 					exists = this.arrayUtil.contains(alreadyReserved, diff["replace"][replaceArryIndx]);
 					if(!exists) {
 						tags[parentVersion["developer"]].push(diff["replace"][replaceArryIndx]);
@@ -85,7 +84,6 @@ SourceTagger.prototype = {
 				parentVersion = currentVersion;
 			}
 		}
-		
 		
 		if(beforeDurationVersion && latestVersion) {
 			var beforeDurationVersionPayload = beforeDurationVersion.payload?beforeDurationVersion.payload: "";
@@ -99,7 +97,24 @@ SourceTagger.prototype = {
 				if(!exists) {
 					tags[this.unknownDeveloper].push(diff["equal"][equalArryIndx]);				
 				}
-			}			
+			}	
+			if(!tags[parentVersion["developer"]]) {
+					tags[parentVersion["developer"]] = [];
+			}
+			for(insertArryIndx in diff["insert"]) {
+				exists = this.arrayUtil.contains(alreadyReserved, diff["insert"][insertArryIndx]);
+				if(!exists) {
+					tags[parentVersion["developer"]].push(diff["insert"][insertArryIndx]);
+					alreadyReserved.push(diff["insert"][insertArryIndx]);
+				}
+			}
+			for(replaceArryIndx in diff["replace"]) {
+				exists = this.arrayUtil.contains(alreadyReserved, diff["replace"][replaceArryIndx]);
+				if(!exists) {
+					tags[parentVersion["developer"]].push(diff["replace"][replaceArryIndx]);
+					alreadyReserved.push(diff["replace"][replaceArryIndx]);
+				}
+			}
 		}else {			
 			if(parentVersion){
 				if(!tags[parentVersion["developer"]]) {
@@ -124,7 +139,7 @@ SourceTagger.prototype = {
         <sys_created_on>2017-10-08 07:00:14</sys_created_on>
         <sys_customer_update>true</sys_customer_update>
         <sys_id>84f97f6bdb654f007236d9f0ce9619dc</sys_id>
-        <sys_mod_count>35</sys_mod_count>
+        <sys_mod_count>36</sys_mod_count>
         <sys_name>SourceTagger</sys_name>
         <sys_package display_value="sn_rcr_v1" source="x_snc_sn_rcr_v1">14191d3f4ff48700afef74828110c799</sys_package>
         <sys_policy/>
@@ -132,6 +147,6 @@ SourceTagger.prototype = {
         <sys_scope display_value="sn_rcr_v1">14191d3f4ff48700afef74828110c799</sys_scope>
         <sys_update_name>sys_script_include_84f97f6bdb654f007236d9f0ce9619dc</sys_update_name>
         <sys_updated_by>chaitanya</sys_updated_by>
-        <sys_updated_on>2017-10-08 20:54:20</sys_updated_on>
+        <sys_updated_on>2017-10-08 21:09:32</sys_updated_on>
     </sys_script_include>
 </record_update>
