@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_snc_sn_rcr_v1.SourceTagger</api_name>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>SourceTagger</name>
+        <script><![CDATA[var SourceTagger = Class.create();
+SourceTagger.prototype = {
+
+	compareUtil : new x_snc_sn_rcr_v1.ScriptComparator(),
+	
+	arrayUtil : new global.ArrayUtil(),
+	
+	duration: 15,
+	
+	unknownDeveloper: "UNKNOWN",
+	
+	initialize: function(duration) {
+		if(duration) {
+			this.duration = duration;			
+		}
+	},
+	
+	getTags: function(fileSysId, fileType) {
+		var latestVersion, currentVersion, diff, parentVersion, beforeDurationVersion, beforeDurationVersionGR;
+		var versionMap = [];
+		var prevDev = "", exists, equalArryIndx;
+		var tags = {};
+		var alreadyReserved = [];
+		
+		var vGRBefore = new GlideRecord('sys_update_version');
+		var encodedQuery = "sys_created_on<javascript:gs.daysAgoStart(" + this.duration + ")";
+		vGRBefore.addEncodedQuery(encodedQuery);
+		vGRBefore.addQuery('name',  fileType + '_' + fileSysId);
+		vGRBefore.setLimit(1);
+		vGRBefore.orderByDesc('sys_created_on');
+		
+		vGRBefore.query();
+		
+		if(vGRBefore.hasNext()){
+			
+			beforeDurationVersionGR = vGRBefore.next();
+			beforeDurationVersion = {'developer': vGRBefore.getValue("sys_created_by"), 
+									   'version': vGRBefore.getValue("sys_id"), 
+									   'payload': vGRBefore.getValue('payload')};
+		}
+		
+		var vGR = new GlideRecord('sys_update_version');
+		encodedQuery = "sys_created_on>=javascript:gs.daysAgoStart(" + this.duration + ")";
+		vGR.addEncodedQuery(encodedQuery);
+		vGR.addQuery('name',  fileType + '_' + fileSysId);
+		vGR.orderByDesc('sys_created_on');
+		vGR.query();
+		
+		while(vGR.next()){
+			versionMap.push({'developer': vGR.getValue("sys_created_by"), 'version': vGR.getValue("sys_id"), 'payload': vGR.getValue('payload')});  			
+		}
+
+		
+		for(var versionIndx in versionMap) {
+			if(!latestVersion) {
+				latestVersion = versionMap[versionIndx];
+				parentVersion = latestVersion;
+			}else{
+				currentVersion = versionMap[versionIndx];
+				diff = this.compareUtil.getSourceTags(currentVersion.payload, latestVersion.payload, fileType);
+				if(!tags[parentVersion["developer"]]) {
+					tags[parentVersion["developer"]] = [];
+				}
+				for(var insertArryIndx in diff["insert"]) {
+					exists = this.arrayUtil.contains(alreadyReserved, diff["insert"][insertArryIndx]);
+					if(!exists) {
+						tags[parentVersion["developer"]].push(diff["insert"][insertArryIndx]);
+						alreadyReserved.push(diff["insert"][insertArryIndx]);
+					}
+				}
+				for(var replaceArryIndx in diff["replace"]) {
+					exists = this.arrayUtil.contains(alreadyReserved, diff["replace"][replaceArryIndx]);
+					if(!exists) {
+						tags[parentVersion["developer"]].push(diff["replace"][replaceArryIndx]);
+						alreadyReserved.push(diff["replace"][replaceArryIndx]);
+					}
+				}
+				parentVersion = currentVersion;
+			}
+		}
+		
+		
+		if(beforeDurationVersion){
+			diff = this.compareUtil.getSourceTags(beforeDurationVersion.payload, latestVersion.payload, fileType);			
+			if(!tags[this.unknownDeveloper]) {
+				tags[this.unknownDeveloper] = [];
+			}
+			for(equalArryIndx in diff["equal"]) {
+				exists = this.arrayUtil.contains(alreadyReserved, diff["equal"][equalArryIndx]);
+				if(!exists) {
+					tags[this.unknownDeveloper].push(diff["equal"][equalArryIndx]);				
+				}
+			}			
+		}else{
+			if(!tags[parentVersion["developer"]]) {
+				tags[parentVersion["developer"]] = [];
+			}
+			for(equalArryIndx in diff["equal"]) {
+				exists = this.arrayUtil.contains(alreadyReserved, diff["equal"][equalArryIndx]);
+				if(!exists) {
+					tags[parentVersion["developer"]].push(diff["equal"][equalArryIndx]);				
+				}
+			}	
+		}
+		
+		return tags;
+	},
+
+    type: 'SourceTagger'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>chaitanya</sys_created_by>
+        <sys_created_on>2017-10-08 07:00:14</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>84f97f6bdb654f007236d9f0ce9619dc</sys_id>
+        <sys_mod_count>32</sys_mod_count>
+        <sys_name>SourceTagger</sys_name>
+        <sys_package display_value="sn_rcr_v1" source="x_snc_sn_rcr_v1">14191d3f4ff48700afef74828110c799</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="sn_rcr_v1">14191d3f4ff48700afef74828110c799</sys_scope>
+        <sys_update_name>sys_script_include_84f97f6bdb654f007236d9f0ce9619dc</sys_update_name>
+        <sys_updated_by>chaitanya</sys_updated_by>
+        <sys_updated_on>2017-10-08 17:42:47</sys_updated_on>
+    </sys_script_include>
+</record_update>
