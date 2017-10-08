@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<database>
-    <element label="Script Source Tag" max_length="40" name="x_snc_sn_rcr_v1_script_source_tag" type="collection">
-        <element label="Current Version" max_length="40" name="current_version" type="string"/>
-        <element label="File Sys ID" max_length="40" name="file_sys_id" type="string"/>
-        <element label="Source" max_length="40" name="source" type="string"/>
-        <element label="Tag Range" max_length="40" name="tag_range" type="string"/>
-    </element>
-</database>
