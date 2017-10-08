@@ -87,7 +87,7 @@ SourceTagger.prototype = {
 		}
 		
 		
-		if(beforeDurationVersion) {
+		if(beforeDurationVersion && latestVersion) {
 			var beforeDurationVersionPayload = beforeDurationVersion.payload?beforeDurationVersion.payload: "";
 			var latestVersionPayload = latestVersion.payload?latestVersion.payload: "";
 			diff = this.compareUtil.getSourceTags(beforeDurationVersionPayload, latestVersionPayload, fileType);			
@@ -124,7 +124,7 @@ SourceTagger.prototype = {
         <sys_created_on>2017-10-08 07:00:14</sys_created_on>
         <sys_customer_update>true</sys_customer_update>
         <sys_id>84f97f6bdb654f007236d9f0ce9619dc</sys_id>
-        <sys_mod_count>34</sys_mod_count>
+        <sys_mod_count>35</sys_mod_count>
         <sys_name>SourceTagger</sys_name>
         <sys_package display_value="sn_rcr_v1" source="x_snc_sn_rcr_v1">14191d3f4ff48700afef74828110c799</sys_package>
         <sys_policy/>
@@ -132,6 +132,6 @@ SourceTagger.prototype = {
         <sys_scope display_value="sn_rcr_v1">14191d3f4ff48700afef74828110c799</sys_scope>
         <sys_update_name>sys_script_include_84f97f6bdb654f007236d9f0ce9619dc</sys_update_name>
         <sys_updated_by>chaitanya</sys_updated_by>
-        <sys_updated_on>2017-10-08 20:48:35</sys_updated_on>
+        <sys_updated_on>2017-10-08 20:54:20</sys_updated_on>
     </sys_script_include>
 </record_update>
