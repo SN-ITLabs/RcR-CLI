@@ -29,7 +29,7 @@
 		output[fileObj["fileSysId"]] = tags;
 	}
 	
-	//output = {"fileSysId": {"shyam":[15,16,17,4,7,10],"chaitanya":[8,9,13,14],"anil.akula":[5,6],"admin.readonly":[3,11]}}
+	//output = {"fileSysId": {"shyam":[15,16,17,4,7,10],"chaitanya":[8,9,13,14],"anil.akula":[5,6],"admin.readonly":[3,11], "UNKNOWN": [2,1,23,22]}}
 	
 	response.setBody(output);
 	
@@ -68,7 +68,7 @@ gs.info(JSON.stringify(restMessages));
         <sys_created_on>2017-10-08 11:55:29</sys_created_on>
         <sys_customer_update>true</sys_customer_update>
         <sys_id>af1b3c7bdbe54f007236d9f0ce96198d</sys_id>
-        <sys_mod_count>22</sys_mod_count>
+        <sys_mod_count>23</sys_mod_count>
         <sys_name>process</sys_name>
         <sys_package display_value="sn_rcr_v1" source="x_snc_sn_rcr_v1">14191d3f4ff48700afef74828110c799</sys_package>
         <sys_policy/>
@@ -76,7 +76,7 @@ gs.info(JSON.stringify(restMessages));
         <sys_scope display_value="sn_rcr_v1">14191d3f4ff48700afef74828110c799</sys_scope>
         <sys_update_name>sys_ws_operation_af1b3c7bdbe54f007236d9f0ce96198d</sys_update_name>
         <sys_updated_by>chaitanya</sys_updated_by>
-        <sys_updated_on>2017-10-08 17:00:59</sys_updated_on>
+        <sys_updated_on>2017-10-09 11:46:22</sys_updated_on>
         <web_service_definition display_value="getTags">d3ca3c7bdbe54f007236d9f0ce961988</web_service_definition>
         <web_service_version/>
     </sys_ws_operation>
