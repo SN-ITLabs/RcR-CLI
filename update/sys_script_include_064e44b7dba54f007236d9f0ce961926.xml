@@ -47,7 +47,7 @@ ScriptComparator.prototype = {
 		if (!new_script || !old_script) return;
 
         try {
-            var df = new global.Differ2();
+            var df = new global.Differ();
             var _diff = df.diff(old_script, new_script, 'SCRIPT', true);
             result = this.getDiffArrayFromXML(_diff);
         } catch (e) {
@@ -160,14 +160,14 @@ ScriptComparator.prototype = {
         <sys_created_on>2017-10-08 08:33:27</sys_created_on>
         <sys_customer_update>true</sys_customer_update>
         <sys_id>064e44b7dba54f007236d9f0ce961926</sys_id>
-        <sys_mod_count>20</sys_mod_count>
+        <sys_mod_count>21</sys_mod_count>
         <sys_name>ScriptComparator</sys_name>
         <sys_package display_value="sn_rcr_v1" source="x_snc_sn_rcr_v1">14191d3f4ff48700afef74828110c799</sys_package>
         <sys_policy>read</sys_policy>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="sn_rcr_v1">14191d3f4ff48700afef74828110c799</sys_scope>
         <sys_update_name>sys_script_include_064e44b7dba54f007236d9f0ce961926</sys_update_name>
-        <sys_updated_by>chaitanya</sys_updated_by>
-        <sys_updated_on>2017-10-27 09:46:16</sys_updated_on>
+        <sys_updated_by>pradeep.g</sys_updated_by>
+        <sys_updated_on>2017-10-30 11:37:53</sys_updated_on>
     </sys_script_include>
 </record_update>
